@@ -34,7 +34,7 @@ public class HttpSend {
         //添加请求头
         con.setRequestMethod(rq.getMethod());
         con.setRequestProperty("User-Agent", USER_AGENT);
-        con.setRequestProperty("Accept-Language", "en-US,en;q=0.5"); // get 可不用這行
+        con.setRequestProperty("Accept-Language", "UTF-8"); // get 可不用這行
 
         // 組成 Data From
         con.setDoOutput(true);
@@ -55,7 +55,7 @@ public class HttpSend {
         rs.setStatusCode(con.getResponseCode());
         if(rs.getStatusCode() == 200) {
             try {
-                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(),"UTF-8"));
                 String inputLine;
                 StringBuilder response = new StringBuilder();
                 while ((inputLine = in.readLine()) != null) {
