@@ -12,6 +12,20 @@ import java.util.Date;
 
 public class NumberUtility {
     /**
+     * null -> 0
+     *
+     * @param num
+     * @return
+     */
+    public static Integer null2Integer(Integer num) {
+        if (num == null) {
+            num = 0;
+        }
+        return num;
+    }
+
+
+    /**
      * null -> 0.0
      *
      * @param num
