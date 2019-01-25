@@ -11,6 +11,9 @@ public class FileVo {
     @Setter
     private String Path;
 
+    public FileVo() {
+    }
+
     public FileVo(String name, String path) {
         Name = name;
         Path = path;

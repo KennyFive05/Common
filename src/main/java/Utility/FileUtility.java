@@ -113,8 +113,8 @@ public class FileUtility {
      * @throws IOException
      */
     public Path copy(String source, String dest, CopyOption... options) throws IOException {
-        source.replace("/","\\");
-        dest.replace("/","\\");
+        source = source.replace("/", "\\");
+        dest = dest.replace("/", "\\");
         // String to = "";'
         Path to = Paths.get(dest.substring(0, dest.lastIndexOf("\\")));
         if (!Files.exists(to)) {
@@ -125,8 +125,44 @@ public class FileUtility {
         return Files.copy(new File(source).toPath(), new File(dest).toPath(), options);
     }
 
+    /**
+     * 檢查目錄是否存在
+     *
+     * @param dir
+     * @return
+     */
     public boolean isLivebyDir(String dir) {
         return Files.exists(Paths.get(dir));
+    }
+
+    /**
+     * 檢查檔案是否存在
+     *
+     * @param name
+     * @return
+     */
+    public boolean isLivebyFile(String name) {
+        File file = new File(name);
+        return file.isFile();
+    }
+
+    /**
+     * 建立目錄
+     *
+     * @param dir
+     * @return
+     * @throws IOException
+     */
+    public String CreateDir(String dir) throws IOException {
+        dir = dir.replace("/", "\\");
+        // String to = "";'
+        Path to = Paths.get(dir.substring(0, dir.lastIndexOf("\\")));
+        if (!Files.exists(to)) {
+            // 建立目錄
+            to = Files.createDirectories(to);
+        }
+
+        return to.toUri().getPath();
     }
 
     /**
@@ -171,10 +207,10 @@ public class FileUtility {
                     filter = new ArrayList<>(Arrays.asList(""));
                 // 檢查檔名
                 for (String tFilter : filter) {
-                    if ((url + file).toLowerCase().indexOf(tFilter.toLowerCase()) > -1
+                    if ((url + file).toLowerCase().indexOf(tFilter.toLowerCase().replace('/', '\\')) > -1
                             && (!isSeachDir || !new java.io.File(url + file).isDirectory())) {
                         // 有符合檔名的檔案
-                        result.add(new FileVo(file, url));
+                        result.add(new FileVo(file, url.replace("/", "\\")));
                         isDir = false;
                         break;
                     }
@@ -201,7 +237,7 @@ public class FileUtility {
 
         boolean bool = false;
         for (String tBlacklist : blacklist) {
-            if (file.toLowerCase().indexOf(tBlacklist.toLowerCase()) > -1) {
+            if (file.toLowerCase().contains(tBlacklist.toLowerCase())) {
                 bool = true;
             }
         }

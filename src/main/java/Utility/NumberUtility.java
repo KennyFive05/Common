@@ -181,4 +181,8 @@ public class NumberUtility {
 
         return result;
     }
+
+    public static String hello(){
+        return "Hello";
+    }
 }
