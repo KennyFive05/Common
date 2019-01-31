@@ -24,7 +24,6 @@ public class NumberUtility {
         return num;
     }
 
-
     /**
      * null -> 0.0
      *
@@ -45,25 +44,35 @@ public class NumberUtility {
      * @param inputText
      * @param format
      * @return
+     * @throws Exception
+     */
+    public static String tryFormat(String fieldType, String inputText, String format) throws Exception {
+        String result = inputText;
+        switch (fieldType.substring(0, 1)) {
+            case "9":
+                result = formatMath(fieldType, inputText, format);
+                break;
+            case "D":
+                result = formatDate(fieldType, inputText, format);
+                break;
+        }
+        return result;
+    }
+
+    /**
+     * format
+     *
+     * @param fieldType
+     * @param inputText
+     * @param format
+     * @return
      */
     public static String format(String fieldType, String inputText, String format) {
-        String result = inputText;
-
         try {
-            switch (fieldType.substring(0, 1)) {
-                case "9":
-                    result = formatMath(fieldType, inputText, format);
-                    break;
-                case "D":
-                    result = formatDate(fieldType, inputText, format);
-                    break;
-            }
+            return tryFormat(fieldType, inputText, format);
         } catch (Exception e) {
-            System.err.println("NumberUtility.format error: {fieldType:" + fieldType + ", inputText:" + inputText
-                    + ", format:" + format + "}");
+            return inputText;
         }
-
-        return result;
     }
 
     /**
@@ -152,8 +161,8 @@ public class NumberUtility {
      * @return
      * @throws ParseException
      */
-    private static String formatDate(String fieldType, String inputText, String format) {
-        String result = inputText;
+    private static String formatDate(String fieldType, String inputText, String format) throws ParseException {
+        String result;
         String inputType = "";
         if (fieldType.indexOf("(") > 0 && fieldType.indexOf(")") > 0) {
             inputType = fieldType.substring(fieldType.indexOf("(") + 1, fieldType.indexOf(")"));
@@ -168,21 +177,13 @@ public class NumberUtility {
                     break;
             }
         }
-        try {
-            SimpleDateFormat inSdf = new SimpleDateFormat(inputType);
-            Date date = inSdf.parse(inputText);
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            SimpleDateFormat outSdf = new SimpleDateFormat(format);
-            result = outSdf.format(calendar.getTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        SimpleDateFormat inSdf = new SimpleDateFormat(inputType);
+        Date date = inSdf.parse(inputText);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        SimpleDateFormat outSdf = new SimpleDateFormat(format);
+        result = outSdf.format(calendar.getTime());
 
         return result;
-    }
-
-    public static String hello(){
-        return "Hello";
     }
 }
